@@ -1,13 +1,16 @@
 # 项目1：结构化输出信息抽取器
 
-> 基于 LLM 的结构化信息抽取系统，支持简历/合同/商品描述等多场景，
+> 基于 LLM 的结构化信息抽取系统，支持简历/合同/商品描述等多场景。
 > Pydantic Schema 校验 + 失败重试机制，每个字段带置信度评分。
+> 支持 PDF / Word / TXT 三种输入格式。
 
 ## 技术栈
 
 - Python 3.10+
-- DeepSeek API（OpenAI 兼容接口）
+- **模型**：阿里云百炼 `qwen-max`（也可切换 DeepSeek `deepseek-chat`，OpenAI 兼容接口）
 - Pydantic v2（Schema 定义 + 校验）
+- pymupdf（PDF 文本提取）
+- python-docx（Word 文本提取）
 - 零框架依赖（不引入 LangChain），纯 API 调用
 
 ## 快速开始
@@ -16,32 +19,44 @@
 # 1. 安装依赖
 pip install -r requirements.txt
 
-# 2. 设置 API Key
-set DEEPSEEK_API_KEY=sk-your-key-here
+# 2. 设置 API Key（二选一）
+#    百炼用户：
+set DASHSCOPE_API_KEY=sk-your-key-here
+#    DeepSeek 用户：需同时改 extractor.py 中的 base_url 和 model
 
-# 3. 运行
+# 3. 运行（支持 .txt / .pdf / .docx）
 python main.py resume -f tests/resume_sample.txt
 python main.py contract -f tests/contract_sample.txt
 python main.py product -f tests/product_sample.txt
 
-# 4. 也可以直接传文本
+# 4. 直接传文本（不需要文件）
 python main.py product -t "小米14 Ultra, 骁龙8Gen3, 6499元, 徕卡四摄"
+
+# 5. 乱码输入 → 验证重试机制
+python main.py resume -f tests/bad_input.txt
 ```
 
 ## 项目结构
 
 ```
 01project/
-├── schemas.py      # Pydantic 模型定义（Resume / Contract / Product）
-├── prompts.py      # 三种输入类型的 System Prompt 模板
-├── extractor.py    # 核心抽取逻辑：API 调用 → JSON 解析 → 校验 → 重试
-├── main.py         # CLI 入口
+├── schemas.py                  # Pydantic 模型定义（Resume / Contract / Product）
+├── prompts.py                  # 三种输入类型的 System Prompt 模板
+├── extractor.py                # 核心抽取逻辑：API 调用 → JSON 解析 → 校验 → 重试
+├── reader.py                   # 文件读取器：PDF / Word / TXT → 纯文本
+├── tools.py                    # 工具定义模板（6个，含风险分级，复用到项目3）
+├── main.py                     # CLI 入口
 ├── requirements.txt
+├── .gitignore
+├── .env.example
 ├── tests/
-│   ├── resume_sample.txt    # 简历测试样本
-│   ├── contract_sample.txt  # 合同测试样本
-│   ├── product_sample.txt   # 商品描述测试样本
-│   └── bad_input.txt        # 乱码输入（测试重试机制）
+│   ├── resume_sample.txt       # 简历测试样本
+│   ├── resume_expected.json    # 简历预期输出
+│   ├── contract_sample.txt     # 合同测试样本
+│   ├── contract_expected.json  # 合同预期输出
+│   ├── product_sample.txt      # 商品描述测试样本
+│   ├── product_expected.json   # 商品描述预期输出
+│   └── bad_input.txt           # 乱码输入（测试重试机制）
 └── README.md
 ```
 
@@ -92,6 +107,13 @@ python main.py product -t "小米14 Ultra, 骁龙8Gen3, 6499元, 徕卡四摄"
   "email_confidence": 1.0,
   "phone": "18612345678",
   "phone_confidence": 1.0,
+  "project_names": ["AgentFlow", "RAG-Chat"],
+  "project_names_confidence": 0.95,
+  "project_descriptions": [
+    "基于 LangGraph 的 Agent 编排框架，支持多 Agent 协作",
+    "本地知识库问答系统，BM25 + 向量混合检索"
+  ],
+  "project_descriptions_confidence": 0.9,
   "summary": "5 年后端和 LLM 应用开发经验，专注于 Agent 架构和 RAG 系统",
   "summary_confidence": 0.85
 }
@@ -105,4 +127,4 @@ python main.py product -t "小米14 Ultra, 骁龙8Gen3, 6499元, 徕卡四摄"
 - [x] 至少 2 种输入类型的测试（简历 + 合同 + 商品描述 = 3 种）
 - [x] Pydantic Schema 定义 + 失败重试逻辑（`tests/bad_input.txt` 验证）
 - [x] 每个字段带 `confidence` 字段
-- [ ] Function Calling 工具定义模板 → **项目 3 再用**
+- [x] Function Calling 工具定义模板 — `tools.py`，6 个工具 + 风险分级，可直接复用到项目3
