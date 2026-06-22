@@ -14,6 +14,27 @@ from prompts import PROMPT_MAP
 
 MAX_RETRIES = 3
 
+# 每种类型的字段修正提示（只在 model_validate 失败时用）
+RETRY_HINTS = {
+    "resume": (
+        "- 所有 `*_confidence` 字段是 number 类型，取值范围 0.0 ~ 1.0\n"
+        "- skills 和 project_names、project_descriptions 是数组类型（即使只有一个元素也要用 [] 包起来）\n"
+        "- years_of_experience 是 number 或 null，不要填字符串"
+    ),
+    "contract": (
+        "- 所有 `*_confidence` 字段是 number 类型，取值范围 0.0 ~ 1.0\n"
+        "- key_terms 是数组类型（即使只有一条也要用 [] 包起来）\n"
+        "- amount 是 number 或 null，不要带「元」或逗号\n"
+        "- start_date / end_date 为 YYYY-MM-DD 格式的字符串或空字符串"
+    ),
+    "product": (
+        "- 所有 `*_confidence` 字段是 number 类型，取值范围 0.0 ~ 1.0\n"
+        "- features 是数组类型（即使只有一个卖点也要用 [] 包起来）\n"
+        "- specifications 是对象类型（key-value 对）\n"
+        "- price 是 number 或 null，只填数字不要带「元」或货币符号"
+    ),
+}
+
 
 class ExtractionError(Exception):
     """抽取失败异常（重试耗尽后仍失败时抛出）"""
@@ -77,7 +98,7 @@ def extract(text: str, extract_type: str, max_retries: int = MAX_RETRIES):
 
             # ── 第 1 关：JSON 解析 ──
             try:
-                data = json.loads(raw_output)
+                data = json.loads(raw_output)  # 返回一个字典，用于 LLM 调用
             except json.JSONDecodeError as e:
                 last_error = f"JSON 解析失败: {e}"
                 messages.append({"role": "assistant", "content": raw_output})
@@ -88,6 +109,7 @@ def extract(text: str, extract_type: str, max_retries: int = MAX_RETRIES):
                         f"请重新输出，确保是合法的 JSON 格式。"
                     ),
                 })
+                
                 continue  # 重试
 
             # ── 第 2 关：Pydantic 校验 ──
@@ -96,18 +118,16 @@ def extract(text: str, extract_type: str, max_retries: int = MAX_RETRIES):
                 return result  # ✅ 校验通过，返回结果
             except ValidationError as e:
                 last_error = f"字段校验失败"
+                hint = RETRY_HINTS.get(extract_type, "")
                 messages.append({"role": "assistant", "content": raw_output})
                 messages.append({
                     "role": "user",
                     "content": (
                         f"你的输出校验失败，以下是具体错误:\n{e}\n\n"
-                        f"请修正后重新输出完整的 JSON。提示:\n"
-                        f"- 所有 `*_confidence` 字段是 number 类型，取值范围 0.0 ~ 1.0\n"
-                        f"- skills / key_terms / features 是数组类型\n"
-                        f"- years_of_experience / amount / price 可以是 number 或 null\n"
-                        f"- specifications 是对象类型"
+                        f"请修正后重新输出完整的 JSON。提示:\n{hint}"
                     ),
                 })
+                
                 continue  # 重试
 
         except Exception as e:
