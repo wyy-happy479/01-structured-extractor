@@ -1,0 +1,24 @@
+{
+  "party_a": "上海字节跳动科技有限公司",
+  "party_a_confidence": 1.0,
+  "party_b": "李四",
+  "party_b_confidence": 1.0,
+  "contract_type": "劳动合同",
+  "contract_type_confidence": 1.0,
+  "amount": 1620000.0,
+  "amount_confidence": 0.9,
+  "start_date": "2024-03-01",
+  "start_date_confidence": 1.0,
+  "end_date": "2027-02-28",
+  "end_date_confidence": 1.0,
+  "key_terms": [
+    "月薪45000元，年终奖3-6个月",
+    "保密与竞业限制，离职后2年",
+    "违约金为合同总金额的20%",
+    "五险一金加商业医疗保险",
+    "每年15天带薪年假"
+  ],
+  "key_terms_confidence": 0.85,
+  "governing_law": "中华人民共和国劳动法",
+  "governing_law_confidence": 0.9
+}

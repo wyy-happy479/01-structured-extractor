@@ -52,8 +52,8 @@ def extract(text: str, extract_type: str, max_retries: int = MAX_RETRIES):
     system_prompt = PROMPT_MAP[extract_type]
 
     client = OpenAI(
-        api_key=os.environ.get("DEEPSEEK_API_KEY"),
-        base_url="https://api.deepseek.com",
+        api_key=os.environ.get("DASHSCOPE_API_KEY"),
+        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     )
 
     # 对话消息列表：system prompt + 用户输入
@@ -67,7 +67,7 @@ def extract(text: str, extract_type: str, max_retries: int = MAX_RETRIES):
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
-                model="deepseek-chat",
+                model="qwen-max",
                 messages=messages,
                 response_format={"type": "json_object"},
                 temperature=0.1,     # 低温度 → 输出更稳定、确定性更高

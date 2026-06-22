@@ -37,6 +37,12 @@ class Resume(BaseModel):
     phone: str = Field(default="", description="电话号码")
     phone_confidence: float = Field(default=0.0, ge=0.0, le=1.0, description="电话提取置信度")
 
+    project_names: list[str] = Field(default_factory=list, description="项目名称列表")
+    project_names_confidence: float = Field(default=0.0, ge=0.0, le=1.0, description="项目名提取置信度")
+
+    project_descriptions: list[str] = Field(default_factory=list, description="项目描述列表（与 project_names 一一对应）")
+    project_descriptions_confidence: float = Field(default=0.0, ge=0.0, le=1.0, description="项目描述提取置信度")
+
     summary: str = Field(default="", description="一句话总结候选人背景")
     summary_confidence: float = Field(default=0.0, ge=0.0, le=1.0, description="总结置信度")
 

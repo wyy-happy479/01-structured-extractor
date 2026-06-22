@@ -1,0 +1,30 @@
+{
+  "product_name": "iPhone 15 Pro Max 256GB 原色钛金属",
+  "product_name_confidence": 1.0,
+  "category": "智能手机",
+  "category_confidence": 1.0,
+  "brand": "Apple",
+  "brand_confidence": 1.0,
+  "price": 9999.0,
+  "price_confidence": 1.0,
+  "specifications": {
+    "芯片": "A17 Pro",
+    "屏幕": "6.7英寸 Super Retina XDR",
+    "摄像头": "4800万主摄+1200万超广角+1200万长焦",
+    "材质": "钛金属边框",
+    "存储": "256GB",
+    "重量": "221克",
+    "接口": "USB-C"
+  },
+  "specifications_confidence": 0.9,
+  "features": [
+    "A17 Pro芯片性能翻倍",
+    "钛金属设计轻盈坚固",
+    "5倍光学变焦",
+    "新一代人像模式",
+    "车祸检测和紧急SOS卫星通讯"
+  ],
+  "features_confidence": 0.9,
+  "suitable_for": "追求极致性能的数码爱好者、专业影像创作者、商务人士",
+  "suitable_for_confidence": 0.9
+}

@@ -30,6 +30,10 @@ RESUME_SYSTEM_PROMPT = """你是一位专业的信息抽取专家，擅长从简
 | email_confidence | number | 邮箱置信度 |
 | phone | string | 电话号码 |
 | phone_confidence | number | 电话置信度 |
+| project_names | string[] | 项目名称列表（如：["AgentFlow", "RAG-Chat"]） |
+| project_names_confidence | number | 项目名置信度 |
+| project_descriptions | string[] | 项目描述列表，与 project_names 一一对应 |
+| project_descriptions_confidence | number | 项目描述置信度 |
 | summary | string | 一句话总结候选人背景 |
 | summary_confidence | number | 总结置信度 |
 

@@ -1,0 +1,27 @@
+{
+  "name": "张三",
+  "name_confidence": 0.95,
+  "education": "硕士",
+  "education_confidence": 0.95,
+  "school": "北京大学",
+  "school_confidence": 0.95,
+  "major": "计算机科学与技术",
+  "major_confidence": 0.9,
+  "skills": ["Python", "PyTorch", "TensorFlow", "LangChain", "Docker", "Kubernetes", "MySQL", "Redis"],
+  "skills_confidence": 0.9,
+  "years_of_experience": 5,
+  "years_of_experience_confidence": 0.8,
+  "email": "zhangsan@example.com",
+  "email_confidence": 1.0,
+  "phone": "18612345678",
+  "phone_confidence": 1.0,
+  "project_names": ["AgentFlow", "RAG-Chat"],
+  "project_names_confidence": 0.95,
+  "project_descriptions": [
+    "基于 LangGraph 的 Agent 编排框架，支持多 Agent 协作",
+    "本地知识库问答系统，BM25 + 向量混合检索"
+  ],
+  "project_descriptions_confidence": 0.9,
+  "summary": "5 年后端开发经验，2 年 LLM 应用开发经验，专注于 Agent 架构和 RAG 系统",
+  "summary_confidence": 0.85
+}

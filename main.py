@@ -16,6 +16,7 @@ import json
 import sys
 
 from extractor import extract, ExtractionError
+from reader import read_file
 
 
 def format_output(result) -> str:
@@ -60,8 +61,7 @@ def main():
     # ── 获取输入文本 ──
     if args.file:
         try:
-            with open(args.file, "r", encoding="utf-8") as f:
-                text = f.read()
+            text = read_file(args.file)
         except FileNotFoundError:
             print(f"❌ 文件不存在: {args.file}", file=sys.stderr)
             sys.exit(1)
