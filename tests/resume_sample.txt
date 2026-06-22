@@ -1,0 +1,24 @@
+张三 | 男 | 1996年3月 | 18612345678 | zhangsan@example.com
+
+教育背景
+2018.09 - 2021.06  北京大学  计算机科学与技术  硕士
+2014.09 - 2018.06  华中科技大学  软件工程  本科
+
+技能
+Python, PyTorch, TensorFlow, LangChain, Docker, Kubernetes, MySQL, Redis
+
+工作经历
+2022.03 - 至今  字节跳动  高级后端开发工程师
+- 负责推荐系统后端服务开发，日均处理 10 亿+ 请求
+- 使用 Python + Go 重构核心服务，延迟降低 40%
+- 引入 LangChain + LLM 实现智能客服系统
+
+2021.07 - 2022.02  美团  Java 开发工程师
+- 参与支付系统开发，负责订单状态机设计与实现
+
+项目
+- AgentFlow: 基于 LangGraph 的 Agent 编排框架，支持多 Agent 协作
+- RAG-Chat: 本地知识库问答系统，BM25 + 向量混合检索
+
+自我评价
+5 年后端开发经验，2 年 LLM 应用开发经验。专注于 Agent 架构和 RAG 系统。
